@@ -1,43 +1,83 @@
-# Introduction
+<div align='right'>
+    <a href="./README.md">Inglês |</a>
+    <a href="./PORTUGUESE.md">Português</a>
+</div>
 
-This is a skeleton application using the Hyperf framework. This application is meant to be used as a starting place for those looking to get their feet wet with Hyperf Framework.
+<div align='center'>
+    <h1>Template</h1>
+    <a href="https://www.linkedin.com/in/leonardo-akio/" target="_blank"><img src="https://img.shields.io/badge/LinkedIn%20-blue?style=flat&logo=linkedin&labelColor=blue" target="_blank"></a> 
+    <img src="https://img.shields.io/badge/version-v0.1-blue"/>
+    <img src="https://img.shields.io/github/contributors/akioleo/MoneyTransaction_v2"/>
+    <img src="https://img.shields.io/github/stars/akioleo/MoneyTransaction_v2?style=sociale"/>
+    <img src="https://img.shields.io/github/forks/akioleo/MoneyTransaction_v2?style=social"/>
+</div>
 
-# Requirements
+## Ambiente
+- PHP 8.2.7
+- HyperF 3.0.0
+- Composer 2.5.8
+- Swoole 5.0.3
+- Nginx 1.24.0
+- MySQL 8.1.0
+- MongoDB 7.0
+- Redis 7.2.1
 
-Hyperf has some requirements for the system environment, it can only run under Linux and Mac environment, but due to the development of Docker virtualization technology, Docker for Windows can also be used as the running environment under Windows.
+### Como verificar as versões dos containeres
 
-The various versions of Dockerfile have been prepared for you in the [hyperf/hyperf-docker](https://github.com/hyperf/hyperf-docker) project, or directly based on the already built [hyperf/hyperf](https://hub.docker.com/r/hyperf/hyperf) Image to run.
-
-When you don't want to use Docker as the basis for your running environment, you need to make sure that your operating environment meets the following requirements:  
-
- - PHP >= 8.0
- - Any of the following network engines
-   - Swoole PHP extension >= 4.5，with `swoole.use_shortname` set to `Off` in your `php.ini`
-   - Swow PHP extension (Beta)
- - JSON PHP extension
- - Pcntl PHP extension
- - OpenSSL PHP extension （If you need to use the HTTPS）
- - PDO PHP extension （If you need to use the MySQL Client）
- - Redis PHP extension （If you need to use the Redis Client）
- - Protobuf PHP extension （If you need to use the gRPC Server or Client）
-
-# Installation using Composer
-
-The easiest way to create a new Hyperf project is to use [Composer](https://getcomposer.org/). If you don't have it already installed, then please install as per [the documentation](https://getcomposer.org/download/).
-
-To create your new Hyperf project:
-
-```bash
-$ composer create-project hyperf/hyperf-skeleton path/to/install
+- Validar as versões **(PHP, HyperF, Composer, Swoole)**
+```
+php -v   |  composer --version  | php --ri swoole | 
 ```
 
-Once installed, you can run the server immediately using the command below.
-
-```bash
-$ cd path/to/install
-$ php bin/hyperf.php start
+- Buscar pelas ENVs da aplicação
+```
+env
+```
+#### Raiz do projeto
+- Validar versão do **REDIS** 
+```
+docker exec -it cliente-total_redis redis-cli
+```
+```
+INFO SERVER
+```
+- Validar versão do **MySQL** (raiz do projeto)
+```
+docker exec -it cliente-total_mysql mysql -u root -p 
+```
+```
+SELECT VERSION();
 ```
 
-This will start the cli-server on port `9501`, and bind it to all network interfaces. You can then visit the site at `http://localhost:9501/`
+## Iniciando o projeto
+Criar o arquivo `.env` no projeto
+```bash
+php -r "copy('.env.example', '.env');"
+```    
+Faça o build dos containeres no `docker-compose` no diretório raiz:
+```bash
+docker-compose up -d --build
+```
 
-which will bring up Hyperf default home page.
+
+### Serviços e Portas
+
+| Container              | Host Port | Container Port (Internal) |
+| ---------------------- | --------- | ------------------------- |
+| cliente-total_app        | `9501`    | `9501`                  |
+| cliente-total_mysql      | `3306`    | `3306`                  |
+| cliente-total_redis      | `6379`    | `6379`                  |
+
+## Health
+Endpoint que validam a saúde da aplicação e dos serviços:
+
+- `http://localhost:9501/health`
+- `http://localhost:9501/liveness`
+
+## Documentação 
+Endpoint da aplicação: `http://localhost:9501/documentation`
+
+A documentação da API deve ser realizada no formato YAML e são armazenados no diretório `storage/view/api-docs` pelo nome `api-docs-v1.yml` e `api-docs-v2.yml`
+
+**Referências:**
+- [Especificação OpenAPI - Swagger](https://swagger.io/specification/)
