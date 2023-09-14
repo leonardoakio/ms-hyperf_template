@@ -1,0 +1,32 @@
+## Como instalar Swagger
+
+- Instalar View Engine:
+composer require hyperf/view-engine
+
+- Publicar a lib: 
+php bin/hyperf.php vendor:publish hyperf/view-engine
+
+- Um arquivo será criado no autoload (view.php)
+  Podemos utilizar apenas as configurações:
+
+return [
+    'mode' => Mode::SYNC,
+    'config' => [
+        'view_path' => BASE_PATH . '/storage/view/',
+        'cache_path' => BASE_PATH . '/runtime/view/',
+    ],
+];
+
+------------------ ""------------------ "" ------------------ "" ------------------ 
+
+## Hot Reload
+
+- Instalar o módulo:
+composer require hyperf/watcher --dev
+
+- Publicar o arquivo:
+php bin/hyperf.php vendor:publish hyperf/watcher
+
+- Um arquivo será gerado no autoload (watch.php)
+  No app do docker-compose, criar o entrypoint
+entrypoint: ["php", "bin/hyperf.php", "server:watch"]
