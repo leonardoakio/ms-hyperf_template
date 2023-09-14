@@ -1,0 +1,51 @@
+version: '3.9'
+services:
+  app:
+    container_name: cliente-total_app
+    image: cliente-total
+    entrypoint: ["php", "bin/hyperf.php", "server:watch"]
+    build:
+      context: ./
+    environment:
+      - DB_HOST=cliente-total_mysql
+      - DB_DATABASE=cliente-total
+      - DB_USERNAME=root
+      - DB_PASSWORD=root
+    volumes:
+      - ./:/opt/www
+    ports:
+     - 9501:9501
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - kong-net
+
+  mysql:
+    container_name: cliente-total_mysql
+    image: mysql:8.1
+    command: --default-authentication-plugin=mysql_native_password
+    ports:
+      - ${DB_PORT}:3306
+    environment:
+      MYSQL_DATABASE: cliente-total
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - mysql_db:/var/lib/mysql
+    networks:
+      - kong-net
+
+  redis:
+    container_name: cliente-total_redis
+    image: redis:alpine
+    ports:
+      - ${REDIS_PORT}:6379
+    networks:
+      - kong-net
+
+volumes:
+  mysql_db:
+
+networks:
+  kong-net:
+    external: true  
