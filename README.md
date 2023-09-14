@@ -22,6 +22,15 @@
 - MongoDB 7.0
 - Redis 7.2.1
 
+## Estrutura de pastas
+- Arquivo de start: `bin/hyperf.php`
+- Centro de configurações: `config/*`
+- Rotas: `config/routes.php`
+- Server: `config/autoload/server.php``
+- Injeção de dependências: `config/autoload/dependencies.php`
+- Design do projeto: `config/autoload/devtool.php`
+- Aplicação: `app/*`
+
 ### Como verificar as versões dos containeres
 
 - Validar as versões **(PHP, HyperF, Composer, Swoole)**
